@@ -31,10 +31,10 @@ function update() {
 	ctx.fillStyle = '#ff0000';
 	ctx.fillRect(playerX, playerY, 20, 20);
 
-	// Draw the treasures
-	for (let i = 0; i < levels[currentLevel - 1].treasures.length; i++) {
-		const treasure = levels[currentLevel - 1].treasures[i];
-		ctx.drawImage(treasureImage, treasure.x, treasure.y, 20, 20);
+	// Draw the power-ups
+	for (let i = 0; i < levels[currentLevel - 1].powerUps.length; i++) {
+		const powerUp = levels[currentLevel - 1].powerUps[i];
+		ctx.drawImage(powerUpImage, powerUp.x, powerUp.y, 20, 20);
 	}
 
 	// Update the score
@@ -59,24 +59,24 @@ function update() {
 		}
 	}
 
-	// Check for treasure collection
-	for (let i = 0; i < levels[currentLevel - 1].treasures.length; i++) {
-		const treasure = levels[currentLevel - 1].treasures[i];
-		if (checkCollision(playerX, playerY, treasure.x, treasure.y)) {
-			score++;
-			levels[currentLevel - 1].treasures.splice(i, 1);
+	// Check for power-up collection
+	for (let i = 0; i < levels[currentLevel - 1].powerUps.length; i++) {
+		const powerUp = levels[currentLevel - 1].powerUps[i];
+		if (checkCollision(playerX, playerY, powerUp.x, powerUp.y)) {
+			score += 10;
+			levels[currentLevel - 1].powerUps.splice(i, 1);
 		}
 	}
-}
 
-// Utility function to check for collisions
-function checkCollision(x1, y1, x2, y2) {
-	if (x1 + 20 > x2 && x1 < x2 + 20 && y1 + 20 > y2 && y1 < y2 + 20) {
-		return true;
+	// Update the level
+	if (score >= levels[currentLevel - 1].scoreToNextLevel) {
+		currentLevel++;
+		playerX = 50;
+		playerY = 50;
 	}
-	return false;
+
+	requestAnimationFrame(update);
 }
 
-// Initialize the game
+// Start the game
 update();
-setInterval(update, 16); // 60 FPS
